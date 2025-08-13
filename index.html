@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Asad x Hani Wedding Timeline</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@400&display=swap" rel="stylesheet">
   <style>
     body {
@@ -21,28 +22,16 @@
       text-shadow: 0 0 20px #ff99cc;
     }
 
-    .video-box {
-      width: 640px;
-      height: 360px;
+    .countdown-box {
       margin: 40px auto;
-      background: #111;
+      padding: 20px 30px;
+      background: rgba(0, 0, 0, 0.7);
       border-radius: 20px;
-      position: relative;
-      border: 10px solid transparent;
-      box-shadow: 0 0 40px red;
-      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLHsnT8W9GpO3r9yMpDjNgOXt6AzaRkYh9UvzkivfLploDJK-SBogLQzI&s=10');
-      background-size: cover;
-      background-position: center;
-    }
-
-    .countdown {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      box-shadow: 0 0 20px #ff99cc;
+      max-width: 600px;
       font-size: 2em;
-      color: red;
       font-weight: bold;
+      color: #ff3366;
     }
 
     section {
@@ -82,67 +71,13 @@
     .gallery img:hover {
       transform: scale(1.05);
     }
-
-    #romanticPopup {
-      position: fixed;
-      top: 30%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(255, 255, 255, 0.9);
-      color: #ff3366;
-      font-family: 'Great Vibes', cursive;
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 0 30px #ff99cc;
-      display: none;
-      z-index: 1000;
-    }
-
-    #guestForm {
-      margin-top: 40px;
-    }
-
-    input, textarea {
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      font-size: 1em;
-      margin: 10px;
-      width: 80%;
-    }
-
-    button {
-      background: #ff3366;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 1em;
-      cursor: pointer;
-    }
-
-    #guestMessages {
-      margin-top: 30px;
-      max-height: 400px;
-      overflow-y: auto;
-    }
-
-    canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: 999;
-    }
   </style>
 </head>
 <body>
 
   <header>Asad x Hani Wedding Timeline</header>
 
-  <div class="video-box" id="videoBox">
-    <div class="countdown" id="countdown"></div>
-  </div>
+  <div class="countdown-box" id="countdown">Loading countdown...</div>
 
   <section>
     <h2>Our Love Journey</h2>
@@ -157,46 +92,22 @@
   <section>
     <h2>Most Beautiful Couple in the Universe</h2>
     <div class="gallery">
-      <img src="https://i.ibb.co/PGDTWC4z/1751532316310.jpg" alt="1751532316310">
-      <img src="https://i.ibb.co/jv0ZPrN2/1751532318134.jpg" alt="1751532318134">
+      <img src="https://i.ibb.co/PGDTWC4z/1751532316310.jpg" alt="Asad & Hani 1">
+      <img src="https://i.ibb.co/jv0ZPrN2/1751532318134.jpg" alt="Asad & Hani 2">
     </div>
-  </section>
-
-  <div id="romanticPopup">💖 Asad & Hani’s love story begins today. May it bloom forever, with Allah’s blessings. 💖</div>
-  <canvas id="fireworksCanvas" width="0" height="0"></canvas>
-
-  <section>
-    <h2>Leave Your Blessings</h2>
-    <form id="guestForm">
-      <input type="text" name="name" placeholder="Your Name" required>
-      <textarea name="message" placeholder="Your Message" required></textarea>
-      <button type="submit">Send Blessing</button>
-    </form>
-    <div id="guestMessages"></div>
   </section>
 
   <script>
     window.addEventListener('DOMContentLoaded', () => {
       const countdownElement = document.getElementById('countdown');
-      const videoBox = document.getElementById('videoBox');
-      const popup = document.getElementById('romanticPopup');
-      const canvas = document.getElementById('fireworksCanvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-
       const targetDate = new Date("October 20, 2025 00:00:00").getTime();
-      const endDate = new Date("October 23, 2025 00:00:00").getTime();
 
       function updateCountdown() {
         const now = new Date().getTime();
         const distance = targetDate - now;
 
-        if (distance < 0 && now < endDate) {
+        if (distance < 0) {
           countdownElement.innerHTML = "🎉 It's Wedding Time!";
-          popup.style.display = 'block';
-          videoBox.innerHTML = `<iframe width="640" height="360" src="https://www.youtube.com/embed/YOUR_LIVESTREAM_ID?autoplay=1" frameborder="0" allowfullscreen></iframe>`;
-          launchFireworks();
           return;
         }
 
@@ -209,8 +120,8 @@
       }
 
       setInterval(updateCountdown, 1000);
+    });
+  </script>
 
-      function launchFireworks() {
-        setInterval(() => {
-          const x = Math.random() * canvas.width;
-          const y = Math.random() *[43dcd9a7-70db-4a1f-b0ae-981daa162054](https://github.com/SCNetwork/CustomDCBot/tree/687ac39708ad292c931d2cf3bcb3666ea04076ec/modules%2F2021-countdown%2Fevents%2Fready.js?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054 "1")[43dcd9a7-70db-4a1f-b0ae-981daa162054](https://github.com/santiaguf/spacex-platzi/tree/c02680dc8d4454bc2f881921af9c5f3dbe88cf90/js%2Flaunches.js?citationMarker=43dcd9a7-70db-4a1f-b0ae-981daa162054 "2")
+</body>
+</html>
