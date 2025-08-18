@@ -127,6 +127,30 @@
       color: #99ffcc;
       font-size: 1.1em;
 }
+
+    #blessingWall {
+      margin-top: 60px;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px #ff66cc;
+}
+
+.blessing {
+      margin-bottom: 20px;
+      padding: 10px;
+      border-bottom: 1px solid #ff99cc;
+}
+
+.blessing strong {
+      color: #ff99cc;
+}
+
+.blessing p {
+      margin: 5px 0;
+      color: #f0f0f0;
+}
   </style>
 </head>
 <body>
@@ -139,12 +163,12 @@
 
   <section>
     <h2>Our Love Journey</h2>
-    <p>Asad met Hani on a beautiful day of his imagination, he fell in Love with that Prettiest girl in the universe. He proposed her and she, after thinking about it a few days, accepted him by the cores of her Heart. Through laughter, shared dreams, and quiet prayers, their bond grew stronger. This page is a tribute to their love—to a Lovely day which will be LiveStreamed on Internet. With Allah’s mercy, may our souls walk side by side till Jannah. May Our Love lead us to Jannah. Tere Mere Piyar Kii Umar Salamat Rahe!</p>
+<p>Asad met Hani on a beautiful day of his imagination, he fell in Love with that Prettiest girl in the universe. He proposed her and she, after thinking about it a few days, accepted him by the cores of her Heart. Through laughter, shared dreams, and quiet prayers, their bond grew stronger. This page is a tribute to their love—to a Lovely day which will be LiveStreamed on Internet. With Allah’s mercy, may our souls walk side by side till Jannah. May Our Love lead us to Jannah. Tere Mere Piyar Kii Umar Salamat Rahe!</p>
   </section>
 
   <section>
     <h2>Why Love Marriage is so Beautiful & Satisfying</h2>
-<p>Love marriage is not just a union of two souls—it’s a celebration of choice, trust, and emotional connection. Asad and Hani chose each other not just for today, but for every tomorrow. Their journey reminds us that love, when nurtured with respect and understanding, becomes the strongest foundation of all.</p>
+    <p>Love marriage is not just a union of two souls—it’s a celebration of choice, trust, and emotional connection. Asad and Hani chose each other not just for today, but for every tomorrow. Their journey reminds us that love, when nurtured with respect and understanding, becomes the strongest foundation of all.</p>
   </section>
 
   <section>
@@ -163,6 +187,11 @@
       <button type="submit">Send Blessing</button>
     </form>
     <div id="confirmation"></div>
+  </section>
+
+  <section id="blessingWall">
+    <h2>💌 Blessings from Our Guests</h2>
+    <div id="blessingsContainer"></div>
   </section>
 
   <script>
@@ -192,6 +221,7 @@
       const form = document.getElementById('guestForm');
       const confirmation = document.getElementById('confirmation');
       const submitButton = form.querySelector('button');
+      const blessingsContainer = document.getElementById('blessingsContainer');
 
       form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -210,11 +240,12 @@
             body: JSON.stringify({ name, message})
 });
 
-          if (response.ok) {
-            confirmation.textContent = "💌 Your blessing has been sent!";
-            form.reset();
+         if (response.ok) {
+  confirmation.textContent = "💌 Your blessing has been sent!";
+  form.reset();
+  loadBlessings(); // Refresh the blessing wall
 } else {
-            confirmation.textContent = "⚠️ Failed to send blessing. Please try again.";
+  confirmation.textContent = "⚠️ Failed to send blessing. Please try again.";
 }
 } catch (err) {
           confirmation.textContent = "⚠️ Error sending blessing.";
@@ -222,8 +253,27 @@
           submitButton.disabled = false;
 }
 });
+
+      // Load blessings from backend
+      async function loadBlessings() {
+        try {
+          const response = await fetch("https://asadxhanu.alwaysdata.net/blessings");
+          const blessings = await response.json();
+          blessingsContainer.innerHTML = blessings.map(b => `
+            <div class="blessing">
+              <strong>${b.name}:</strong>
+              <p>${b.message}</p>
+            </div>
+          `).join('');
+} catch (err) {
+          blessingsContainer.innerHTML = "<p>⚠️ Could not load blessings.</p>";
+}
+}
+
+      loadBlessings();
 });
   </script>
 
 </body>
 </html>
+
