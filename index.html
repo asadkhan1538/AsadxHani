@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Asad x Hani Wedding Timeline</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@400&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(to bottom, #000000, #330000);
+      font-family: 'Roboto', sans-serif;
+      color: white;
+      text-align: center;
+}
+
+    header {
+      padding: 30px;
+      font-size: 3em;
+      font-family: 'Great Vibes', cursive;
+      color: #ff3366;
+      text-shadow: 0 0 20px #ff99cc;
+}
+
+.video-box {
+      width: 640px;
+      height: 360px;
+      margin: 40px auto;
+      background: #111;
+      border-radius: 20px;
+      position: relative;
+      border: 10px solid transparent;
+      box-shadow: 0 0 40px red;
+      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLHsnT8W9GpO3r9yMpDjNgOXt6AzaRkYh9UvzkivfLploDJK-SBogLQzI&s=10');
+      background-size: cover;
+      background-position: center;
+}
+
+.countdown {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2em;
+      color: red;
+      font-weight: bold;
+      background: rgba(0,0,0,0.6);
+      padding: 10px 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px red;
+      max-width: 90%;
+      word-wrap: break-word;
+      text-align: center;
+}
+
+    section {
+      padding: 40px 20px;
+      width: 800px;
+      margin: auto;
+}
+
+    h2 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2em;
+      color: #ff99cc;
+      margin-bottom: 20px;
+}
+
+    p {
+      font-size: 1.2em;
+      line-height: 1.6;
+      color: #f0f0f0;
+}
+
+.gallery {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 30px;
+}
+
+.gallery img {
+      width: 250px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px #ff66cc;
+      transition: transform 0.3s;
+}
+
+.gallery img:hover {
+      transform: scale(1.05);
+}
+
+    #guestForm {
+      margin-top: 40px;
+}
+
+    input, textarea {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 1em;
+      margin: 10px;
+      width: 80%;
+}
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #ccc;
+}
+
+    button {
+      background: #ff3366;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 1em;
+      cursor: pointer;
+}
+
+    button:disabled {
+      background: #999;
+      cursor: not-allowed;
+}
+
+    #confirmation {
+      margin-top: 20px;
+      color: #99ffcc;
+      font-size: 1.1em;
+}
+  </style>
+</head>
+<body>
+
+  <header>Asad x Hani Wedding Timeline</header>
+
+  <div class="video-box">
+    <div class="countdown" id="countdown">Loading countdown...</div>
+  </div>
+
+  <section>
+    <h2>Our Love Journey</h2>
+    <p>Asad met Hani on a beautiful day of his imagination, he fell in Love with that Prettiest girl in the universe. He proposed her and she, after thinking about it a few days, accepted him by the cores of her Heart. Through laughter, shared dreams, and quiet prayers, their bond grew stronger. This page is a tribute to their love—to a Lovely day which will be LiveStreamed on Internet. With Allah’s mercy, may our souls walk side by side till Jannah. May Our Love lead us to Jannah. Tere Mere Piyar Kii Umar Salamat Rahe!</p>
+  </section>
+
+  <section>
+    <h2>Why Love Marriage is so Beautiful & Satisfying</h2>
+<p>Love marriage is not just a union of two souls—it’s a celebration of choice, trust, and emotional connection. Asad and Hani chose each other not just for today, but for every tomorrow. Their journey reminds us that love, when nurtured with respect and understanding, becomes the strongest foundation of all.</p>
+  </section>
+
+  <section>
+    <h2>Most Beautiful Couple in the Universe</h2>
+    <div class="gallery">
+      <img src="https://i.ibb.co/PGDTWC4z/1751532316310.jpg" alt="Asad & Hani 1">
+      <img src="https://i.ibb.co/jv0ZPrN2/1751532318134.jpg" alt="Asad & Hani 2">
+    </div>
+  </section>
+
+  <section>
+    <h2>Leave Your Blessings</h2>
+    <form id="guestForm">
+      <input type="text" name="name" placeholder="Your Name" required aria-label="Your Name">
+      <textarea name="message" placeholder="Your Blessing Message" required aria-label="Your Blessing Message"></textarea>
+      <button type="submit">Send Blessing</button>
+    </form>
+    <div id="confirmation"></div>
+  </section>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const countdownElement = document.getElementById('countdown');
+      const targetDate = new Date("October 20, 2025 00:00:00").getTime();
+
+      function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = targetDate - now;
+
+        if (distance < 0) {
+          countdownElement.innerHTML = "🎉 It's Wedding Time!";
+          return;
+}
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        countdownElement.innerHTML = `${days}D ${hours}H ${minutes}M ${seconds}s Till Wedding`;
+}
+
+      setInterval(updateCountdown, 1000);
+
+      const form = document.getElementById('guestForm');
+      const confirmation = document.getElementById('confirmation');
+      const submitButton = form.querySelector('button');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        submitButton.disabled = true;
+        confirmation.textContent = "Sending your blessing...";
+
+        try {
+          const response = await fetch("https://asadxhanu.alwaysdata.net/send-blessing", {
+            method: 'POST',
+            body: formData
+});
+          if (response.ok) {
+            confirmation.textContent = "💌 Your blessing has been sent!";
+            form.reset();
+} else {
+            confirmation.textContent = "⚠️ Failed to send blessing. Please try again.";
+}
+} catch (err) {
+          confirmation.textContent = "⚠️ Error sending blessing.";
+} finally {
+          submitButton.disabled = false;
+}
+});
+});
+  </script>
+
+</body>
+</html>
+
