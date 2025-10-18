@@ -1,279 +1,505 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Asad x Hani Wedding Timeline</title>
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Roboto:wght@400&display=swap" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      background: linear-gradient(to bottom, #000000, #330000);
-      font-family: 'Roboto', sans-serif;
-      color: white;
-      text-align: center;
-}
+<html lang="en"><head><style>
+        @import url(https://fonts.googleapis.com/css?family=Google+Sans+Text);
+        html {
+          font-family: 'Google Sans Text', 'Google Sans';
+          font-size: 14px;
+          color-scheme: light dark;
+          background: light-dark(white, black);
+          color: light-dark(black, white);
+        }
+        </style>
+        
+        <script type="importmap">{"imports":{"@modelcontextprotocol/sdk/":"https://aistudiocdn.com/@modelcontextprotocol/sdk/dist/esm/","https://aistudiocdn.com/@modelcontextprotocol/sdk@^1.11.0/es2022/":"https://aistudiocdn.com/@modelcontextprotocol/sdk@^1.11.0/es2022/dist/esm/","https://aistudiocdn.com/@modelcontextprotocol/sdk@^1.11.0/client/index?target=es2022":"https://aistudiocdn.com/@modelcontextprotocol/sdk@^1.11.0/dist/esm/client/index?target=es2022","https://aistudiocdn.com/@modelcontextprotocol/sdk@^1.11.0/types?target=es2022":"https://aistudiocdn.com/@modelcontextprotocol/sdk@^1.11.0/dist/esm/types?target=es2022","@/index":"data:application/javascript;base64,","@":"data:application/javascript;base64,","@/App":"data:application/javascript;base64,","@/components/StarryBackground":"data:application/javascript;base64,","@/components/LoveEffect":"data:application/javascript;base64,","@/components/TimerDisplay":"data:application/javascript;base64,","@/components/Celebration":"data:application/javascript;base64,","@/components/PromptModal":"data:application/javascript;base64,","@/components/Signature":"data:application/javascript;base64,","@/components/InteractiveMessage":"data:application/javascript;base64,"}}</script>
+        <script>
+          window.APPLET_FILES = ["index.tsx","metadata.json","index.html","App.tsx","components/StarryBackground.tsx","components/LoveEffect.tsx","components/TimerDisplay.tsx","components/Celebration.tsx","components/PromptModal.tsx","components/Signature.tsx","components/InteractiveMessage.tsx"];
+          </script>
+        <script type="module">
+        (() => {
+  if (window.self === window.top) {
+    // Do not run the shim in the main window, only in iframes.
+    return;
+  }
 
-    header {
-      padding: 30px;
-      font-size: 3em;
-      font-family: 'Great Vibes', cursive;
-      color: #ff3366;
-      text-shadow: 0 0 20px #ff99cc;
-}
+  window.API_KEY = 'GEMINI_API_KEY';
+  window.GEMINI_API_KEY = 'GEMINI_API_KEY';
+  window.process = window.process || {};
+  window.process.env = window.process.env || {};
+  window.process.env.API_KEY = window.API_KEY;
+  window.process.env.GEMINI_API_KEY = window.GEMINI_API_KEY;
 
-.video-box {
-      width: 640px;
-      height: 360px;
-      margin: 40px auto;
-      background: #111;
-      border-radius: 20px;
-      position: relative;
-      border: 10px solid transparent;
-      box-shadow: 0 0 40px red;
-      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLHsnT8W9GpO3r9yMpDjNgOXt6AzaRkYh9UvzkivfLploDJK-SBogLQzI&s=10');
-      background-size: cover;
-      background-position: center;
-}
+  const bootstrapChannel = new Promise((resolve) => {
+    window.addEventListener('message', (event) => {
+      if (event.origin !== 'https://aistudio.google.com') {
+        return;
+      }
 
-.countdown {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 2em;
-      color: red;
-      font-weight: bold;
-      background: rgba(0,0,0,0.6);
-      padding: 10px 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px red;
-      max-width: 90%;
-      word-wrap: break-word;
-      text-align: center;
-}
+      if (event.data.type === 'bootstrap') {
+        resolve({
+          port: event.ports[0],
+          urlPatterns:
+              event.data.urlPatterns.map((pattern) => new RegExp(pattern)),
+        });
+      }
+    });
+  });
 
-    section {
-      padding: 40px 20px;
-      width: 800px;
-      margin: auto;
-}
+  window.aistudio = window.aistudio || {
+    getHostUrl: async function() {
+      const hostPort = (await bootstrapChannel).port;
+      return new Promise((resolve) => {
+        const channel = new MessageChannel();
+        hostPort.postMessage(
+            {type: 'get_host_url'},
+            [channel.port2]);
+        const port = channel.port1;
+        port.onmessage = (message) => {
+          resolve(message.data.url);
+        };
+      });
+    },
+    hasSelectedApiKey: async function() {
+      const hostPort = (await bootstrapChannel).port;
+      return new Promise((resolve) => {
+        const channel = new MessageChannel();
+        hostPort.postMessage(
+            {type: 'has_selected_api_key'},
+            [channel.port2]);
+        const port = channel.port1;
+        port.onmessage = (message) => {
+          resolve(message.data);
+        };
+      });
+    },
+    openSelectKey: async function() {
+      const hostPort = (await bootstrapChannel).port;
+      const channel = new MessageChannel();
+      hostPort.postMessage(
+          {type: 'open_select_key'},
+          [channel.port2]);
+    },
+    getModelQuota: async function(model) {
+      const hostPort = (await bootstrapChannel).port;
+      return new Promise((resolve) => {
+        const channel = new MessageChannel();
+        hostPort.postMessage(
+            {type: 'get_model_quota', model},
+            [channel.port2]);
+        const port = channel.port1;
+        port.onmessage = (message) => {
+          resolve(message.data.modelQuota);
+        };
+      });
+    },
+  };
 
-    h2 {
-      font-family: 'Great Vibes', cursive;
-      font-size: 2em;
-      color: #ff99cc;
-      margin-bottom: 20px;
-}
+  const nativeFetch = window.fetch;
 
-    p {
-      font-size: 1.2em;
-      line-height: 1.6;
-      color: #f0f0f0;
-}
+  /**
+   * @param {string | URL | Request} resource The resource of the fetch request.
+   * @param {RequestInit} options The options of the fetch request.
+   * @return {Promise!} The promise of the fetch request.
+   */
+  async function fetch(resource, options) {
+    const config = await bootstrapChannel;
 
-.gallery {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 30px;
-}
+    const request = resource instanceof Request ?
+      resource.clone() :
+      new Request(resource, options);
 
-.gallery img {
-      width: 250px;
-      border-radius: 15px;
-      box-shadow: 0 0 15px #ff66cc;
-      transition: transform 0.3s;
-}
+    if (!config.urlPatterns.some((pattern) => request.url.match(pattern))) {
+      return nativeFetch(resource, options);
+    }
+    const hostPort = config.port;
 
-.gallery img:hover {
-      transform: scale(1.05);
-}
+    const channel = new MessageChannel();
+    const port = channel.port1;
+    let bodyBytes;
+    const transfer = [channel.port2];
+    const parts = [];
+    const buffer = await request.arrayBuffer();
+    if (buffer.byteLength) {
+      bodyBytes = buffer;
+      transfer.push(bodyBytes);
+    }
+    hostPort.postMessage(
+        {
+          type: 'fetch',
+          url: request.url,
+          method: request.method,
+          headers: [...request.headers.entries()],
+          body: bodyBytes,
+        },
+        transfer);
 
-    #guestForm {
-      margin-top: 40px;
-}
+    let streamController;
+    const body = new ReadableStream({
+      start(controller) {
+        streamController = controller;
+      },
+    });
+    let resolveReceive;
+    const receivePromise = new Promise((resolve) => {
+      resolveReceive = resolve;
+    });
+    port.onmessage = (message) => {
+      switch (message.data.type) {
+        case 'response':
+          resolveReceive(new Response(body, {
+            status: message.data.status,
+            statusText: message.data.statusText,
+            headers: new Headers(message.data.headers),
+          }));
+          break;
+        case 'body':
+          streamController.enqueue(message.data.data);
+          break;
+        case 'body_done':
+          streamController.close();
+          break;
+      }
+    };
+    return receivePromise;
+  }
 
-    input, textarea {
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      font-size: 1em;
-      margin: 10px;
-      width: 80%;
-}
+  Object.defineProperty(window, 'fetch', {
+    get: function() {
+      return fetch;
+    },
+  });
 
-    input::placeholder,
-    textarea::placeholder {
-      color: #ccc;
-}
+  // See details in: https://github.com/angular/angular/issues/63064.
+  function patchHistoryStateFunctionForAngular(originalFn, baseHref) {
+    return (state, unused, url) => {
+      if (typeof url === 'string' && !url.startsWith('blob:')) {
+        url = baseHref + url;
+      }
+      return originalFn.apply(window.history, [state, unused, url]);
+    };
+  }
 
-    button {
-      background: #ff3366;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 1em;
-      cursor: pointer;
-}
+  if (false) {
+    const baseHref = window.location.href;
+    window.history.replaceState = patchHistoryStateFunctionForAngular(window.history.replaceState, baseHref);
+    window.history.pushState = patchHistoryStateFunctionForAngular(window.history.pushState, baseHref);
+  }
 
-    button:disabled {
-      background: #999;
-      cursor: not-allowed;
-}
+  const originalWebSocket = window.WebSocket;
+  class ProxiedWebSocket extends EventTarget {
+    /**
+     * @param {string} url The url of the websocket.
+     * @param {Object!} protocols The protocols of the websocket.
+     */
+    constructor(url, protocols) {
+      super();
+      this.url = url;
+      this.protocols = protocols;
 
-    #confirmation {
-      margin-top: 20px;
-      color: #99ffcc;
-      font-size: 1.1em;
-}
+      this.open();
+    }
 
-    #blessingWall {
-      margin-top: 60px;
-      text-align: left;
-      background: rgba(255, 255, 255, 0.05);
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px #ff66cc;
-}
-
-.blessing {
-      margin-bottom: 20px;
-      padding: 10px;
-      border-bottom: 1px solid #ff99cc;
-}
-
-.blessing strong {
-      color: #ff99cc;
-}
-
-.blessing p {
-      margin: 5px 0;
-      color: #f0f0f0;
-}
-  </style>
-</head>
-<body>
-
-  <header>Asad x Hani Wedding Timeline</header>
-
-  <div class="video-box">
-    <div class="countdown" id="countdown">Loading countdown...</div>
-  </div>
-
-  <section>
-    <h2>Our Love Journey</h2>
-<p>Asad met Hani on a beautiful day of his imagination, he fell in Love with that Prettiest girl in the universe. He proposed her and she, after thinking about it a few days, accepted him by the cores of her Heart. Through laughter, shared dreams, and quiet prayers, their bond grew stronger. This page is a tribute to their love—to a Lovely day which will be LiveStreamed on Internet. With Allah’s mercy, may our souls walk side by side till Jannah. May Our Love lead us to Jannah. Tere Mere Piyar Kii Umar Salamat Rahe!</p>
-  </section>
-
-  <section>
-    <h2>Why Love Marriage is so Beautiful & Satisfying</h2>
-    <p>Love marriage is not just a union of two souls—it’s a celebration of choice, trust, and emotional connection. Asad and Hani chose each other not just for today, but for every tomorrow. Their journey reminds us that love, when nurtured with respect and understanding, becomes the strongest foundation of all.</p>
-  </section>
-
-  <section>
-    <h2>Most Beautiful Couple in the Universe</h2>
-    <div class="gallery">
-      <img src="https://i.ibb.co/PGDTWC4z/1751532316310.jpg" alt="Asad & Hani 1">
-      <img src="https://i.ibb.co/jv0ZPrN2/1751532318134.jpg" alt="Asad & Hani 2">
-    </div>
-  </section>
-
-  <section>
-    <h2>Leave Your Blessings</h2>
-    <form id="guestForm">
-      <input type="text" name="name" placeholder="Your Name" required aria-label="Your Name">
-      <textarea name="message" placeholder="Your Blessing Message" required aria-label="Your Blessing Message"></textarea>
-      <button type="submit">Send Blessing</button>
-    </form>
-    <div id="confirmation"></div>
-  </section>
-
-  <section id="blessingWall">
-    <h2>💌 Blessings from our Beautiful Guests</h2>
-    <div id="blessingsContainer"></div>
-  </section>
-
-  <script>
-    window.addEventListener('DOMContentLoaded', () => {
-      const countdownElement = document.getElementById('countdown');
-      const targetDate = new Date("October 20, 2025 00:00:00").getTime();
-
-      function updateCountdown() {
-        const now = new Date().getTime();
-        const distance = targetDate - now;
-
-        if (distance < 0) {
-          countdownElement.innerHTML = "🎉 It's Wedding Time!";
+    /** Opens the websocket. */
+    async open() {
+      const hostPort = (await bootstrapChannel).port;
+      const channel = new MessageChannel();
+      hostPort.postMessage(
+          {type: 'websocket_open', url: this.url, protocols: this.protocols},
+          [channel.port2]);
+      this.port = channel.port1;
+      this.port.onmessage = (message) => {
+        if (message.data.type === 'close') {
+          const event = new CloseEvent('close', {
+            code: message.data.code,
+            reason: message.data.reason,
+            wasClean: message.data.wasClean,
+          });
+          if (this.onclose) {
+            this.onclose(event);
+          }
+          this.dispatchEvent(event);
           return;
-}
+        } else if (message.data.type === 'open') {
+          const event = new Event('open');
+          if (this.onopen) {
+            this.onopen(event);
+          }
+          this.dispatchEvent(event);
+          return;
+        } else if (message.data.type === 'message') {
+          let data = message.data.data;
+          if (message.data.messageType === 'text' || message.data.messageType === 'message') {
+            data = new TextDecoder().decode(data);
+          }
+          const event = new MessageEvent('message', {
+            data,
+            type: message.data.messageType,
+          });
+          if (this.onmessage) {
+            this.onmessage(event);
+          }
+          this.dispatchEvent(event);
+          return;
+        } else if (message.data.type === 'error') {
+          const event = new ErrorEvent('error', {
+            message: message.data.message,
+          });
+          if (this.onerror) {
+            this.onerror(event);
+          }
+          this.dispatchEvent(event);
+          return;
+        }
+        console.error('received unknown message in frame', event.data);
+      };
+    }
+    /**
+     * @param {string|ArrayBuffer!} data The data to send.
+     */
+    send(data) {
+      if (typeof data === 'string') {
+        this.port.postMessage({type: 'send', data});
+      } else {
+        this.port.postMessage({type: 'send', data}, [data.buffer]);
+      }
+    }
 
-        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    /**
+     * @param {number} code The code of the close event.
+     * @param {string} reason The reason of the close event.
+     */
+    close(code, reason) {
+      this.port.postMessage({type: 'close', code, reason});
+    }
+  }
 
-        countdownElement.innerHTML = `${days}D ${hours}H ${minutes}M ${seconds}s Till Wedding`;
-}
+  /**
+   * @param {string} url The url of the websocket.
+   * @param {Object!} protocols The protocols of the websocket.
+   * @return {WebSocket!} The websocket.
+   */
+  function createWebSocket(url, protocols) {
+    // This should come from the bootstrap channel, but we want this to
+    // work for the synchronous constructor here.
+    if (url.startsWith('wss://generativelanguage.googleapis.com/')) {
+      return Reflect.construct(ProxiedWebSocket, [url, protocols]);
+    }
+    return Reflect.construct(originalWebSocket, [url, protocols]);
+  }
 
-      setInterval(updateCountdown, 1000);
+  Object.defineProperty(window, 'WebSocket', {
+    get: function() {
+      return createWebSocket;
+    },
+  });
 
-      const form = document.getElementById('guestForm');
-      const confirmation = document.getElementById('confirmation');
-      const submitButton = form.querySelector('button');
-      const blessingsContainer = document.getElementById('blessingsContainer');
+  async function instrumentErrorReporting() {
+    const errors = [];
+    let hostPort;
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const name = form.querySelector('[name="name"]').value;
-        const message = form.querySelector('[name="message"]').value;
+    function reportError(message) {
+      if (!hostPort) {
+        errors.push(message);
+      } else {
+        hostPort.postMessage({type: 'error', message: message}, message);
+      }
+    }
 
-        submitButton.disabled = true;
-        confirmation.textContent = "Sending your blessing...";
+    function serialize(args) {
+      return args.map((a) => {
+        if (a instanceof Error || a instanceof ErrorEvent) {
+          return a.message;
+        }
+        if(a instanceof CloseEvent) {
+          return {code: a.code, reason: a.reason, wasClean: a.wasClean};
+        }
+        if( a instanceof Map) {
+          return JSON.parse(JSON.stringify([...a.entries()]));
+        }
+        if( a instanceof Set) {
+          return JSON.parse(JSON.stringify([...a.values()]));
+        }
+        if (a instanceof Object) {
+          return JSON.parse(JSON.stringify(a));
+        }
+        return a;
+      });
+    }
 
-        try {
-          const response = await fetch("https://asadxhanu.alwaysdata.net/send-blessing", {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-},
-            body: JSON.stringify({ name, message})
-});
+    const originalConsole = window.console;
+    const originalConsoleLog = window.console.log;
+    const originalConsoleError = window.console.error;
+    const originalConsoleWarn = window.console.warn;
+    const originalConsoleDebug = window.console.debug;
+    window.console = {
+      ...originalConsole,
+      log: (message, ...args) => {
+        originalConsoleLog.apply(window.console, [message, ...args]);
+        const combined = serialize([message, ...args]);
+        reportError({type: 'console_log', message: combined });
+      },
+      debug: (message, ...args) => {
+        originalConsoleDebug.apply(window.console, [message, ...args]);
+        const combined = serialize([message, ...args]);
+        reportError({type: 'console_debug', message: combined });
+      },
+      error: (message, ...args) => {
+        originalConsoleError.apply(window.console, [message, ...args]);
+        const combined = serialize([message, ...args]);
+        reportError({type: 'console_error', message: combined });
+      },
+      warn: (message, ...args) => {
+        originalConsoleWarn.apply(window.console, [message, ...args]);
+        const combined = serialize([message, ...args]);
+        reportError({type: 'console_warn', message: combined });
+      },
+    };
 
-         if (response.ok) {
-  confirmation.textContent = "💌 Your blessing has been sent!";
-  form.reset();
-  loadBlessings(); // Refresh the blessing wall
-} else {
-  confirmation.textContent = "⚠️ Failed to send blessing. Please try again.";
-}
-} catch (err) {
-          confirmation.textContent = "⚠️ Error sending blessing.";
-} finally {
-          submitButton.disabled = false;
-}
-});
+    window.onerror = (message, source, lineno, colno, error) => {
+      reportError({type: 'error', message: serialize([message]), source, lineno, colno, error});
+    };
 
-      // Load blessings from backend
-      async function loadBlessings() {
-        try {
-          const response = await fetch("https://asadxhanu.alwaysdata.net/blessings");
-          const blessings = await response.json();
-          blessingsContainer.innerHTML = blessings.map(b => `
-            <div class="blessing">
-              <strong>${b.name}:</strong>
-              <p>${b.message}</p>
-            </div>
-          `).join('');
-} catch (err) {
-          blessingsContainer.innerHTML = "<p>⚠️ Could not load blessings.</p>";
-}
-}
+    window.onunhandledrejection = (event) => {
+      reportError({type: 'unhandledrejection', message: serialize([event.reason])});
+    };
 
-      loadBlessings();
-});
-  </script>
+    window.alert = (message) => {
+      reportError({type: 'alert', message: serialize([message]) });
+    };
 
-</body>
-</html>
+    hostPort = (await bootstrapChannel).port;
+    for(const error of errors) {
+      hostPort.postMessage({type: 'error', message: error});
+    }
+  }
 
+  const availableFiles = new Set(window.APPLET_FILES || []);
+
+  instrumentErrorReporting();
+
+  window.addEventListener('hashchange', async (e) =>{
+    const config = await bootstrapChannel;
+    const hostPort = config.port;
+    hostPort.postMessage({type: 'hashchange', hash: window.location.hash});
+  });
+
+  if (false) {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/html2canvas-pro';
+    script.onload = () => {
+      window.addEventListener('message', async (event) => {
+        if (event.data?.type === 'capture-screenshot') {
+          try {
+            const canvas = await html2canvas(document.documentElement, {
+              logging: false,
+              useCORS: true,
+              backgroundColor: null,
+              scale: 1,
+            });
+            const hostPort = (await bootstrapChannel).port;
+            hostPort.postMessage(
+              {
+                type: 'screenshot-result',
+                dataUrl: canvas.toDataURL('image/png'),
+                requestId: event.data.requestId,
+                scrollX: document.body.scrollLeft,
+                scrollY: document.body.scrollTop,
+              },
+            );
+          } catch (e) {
+            const hostPort = (await bootstrapChannel).port;
+            hostPort.postMessage(
+              {
+                type: 'screenshot-error',
+                error: e.message,
+                requestId: event.data.requestId,
+              });
+          }
+        }
+      });
+    };
+    document.head.appendChild(script);
+  }
+})();
+// # sourceURL=iframe_shim.js
+        </script>
+        <base href="https://ai.studio">
+
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Countdown to Perfection</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Roboto+Mono:wght@400&amp;display=swap" rel="stylesheet">
+    
+    <!-- React & Babel for JSX in-browser transpilation -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Custom Styles & Animations -->
+    <style>
+        body {
+            background-color: #0a0a0a;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+        @keyframes gentleBreathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        @keyframes celebrateGlow {
+            0%, 100% { text-shadow: 0 0 10px #fcd34d, 0 0 20px #fcd34d, 0 0 30px #fbbf24, 0 0 40px #f59e0b; }
+            50% { text-shadow: 0 0 20px #fef9c3, 0 0 30px #fcd34d, 0 0 40px #fbbf24, 0 0 50px #f59e0b; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+    
+    <!-- Tailwind CSS Configuration -->
+    <script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                fontFamily: {
+                    serif: ['Playfair Display', 'serif'],
+                    mono: ['Roboto Mono', 'monospace'],
+                },
+                animation: {
+                    floatUp: 'floatUp 20s linear infinite',
+                    gentleBreathe: 'gentleBreathe 4s ease-in-out infinite',
+                    celebrateGlow: 'celebrateGlow 2.5s ease-in-out infinite',
+                    fadeIn: 'fadeIn 1s ease-in-out forwards',
+                },
+                keyframes: {
+                    floatUp: {
+                        '0%': { transform: 'translateY(0)', opacity: '1' },
+                        '100%': { transform: 'translateY(-100vh)', opacity: '0' },
+                    },
+                    gentleBreathe: {
+                        '0%, 100%': { transform: 'scale(1)' },
+                        '50%': { transform: 'scale(1.03)' },
+                    },
+                    celebrateGlow: {
+                        '0%, 100%': { 'text-shadow': '0 0 10px #fcd34d, 0 0 20px #fcd34d, 0 0 30px #fbbf24, 0 0 40px #f59e0b' },
+                        '50%': { 'text-shadow': '0 0 20px #fef9c3, 0 0 30px #fcd34d, 0 0 40px #fbbf24, 0 0 50px #f59e0b' },
+                    },
+                    fadeIn: {
+                        from: { opacity: '0' },
+                        to: { opacity: '1' },
+                    },
+                }
+            },
+        },
+    }
+    </script>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-b
