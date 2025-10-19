@@ -116,9 +116,13 @@
     display: block;
     filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.55));
   }
-  .audio-button-wrap {
-  margin-top: 2rem;
-  z-index: 10;
+   
+.audio-button-wrap {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
 }
 
 .audio-button {
@@ -127,10 +131,11 @@
   font-weight: bold;
   font-family: "Cinzel", serif;
   border: none;
-  padding: 0.6rem 1.2rem;
+  padding: 0.5rem 1rem;
   border-radius: 999px;
   cursor: pointer;
-  box-shadow: 0 0 12px rgba(236, 72, 153, 0.4);
+  font-size: 0.9rem;
+  box-shadow: 0 0 10px rgba(236, 72, 153, 0.4);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
