@@ -300,16 +300,16 @@ Asad</div>
         </form>
       </div>
     </div>
-
-    <!-- Small audio play button fixed at bottom right -->
-    <button id="playAudioBtn" class="audio-button" aria-label="Play birthday music">🎵</button>
-
     <!-- Background audio -->
     <audio id="bgAudio" preload="auto" loop>
       <source src="https://raw.githubusercontent.com/asadkhan1538/AsadxHani/main/birthdaysongsforhaniadownloadhappybirthdayhaniason.mp3" type="audio/mpeg">
     </audio>
   </div>
-
+    
+<!-- Small audio play button fixed at bottom center -->
+<div class="audio-button-wrap">
+  <button id="playAudioBtn" class="audio-button" aria-label="Play birthday music">🎵 Play Music</button>
+</div>
   <script>
     // Floating particles
     (function createParticles(){
@@ -344,24 +344,22 @@ Asad</div>
         container.appendChild(el);
       }
     })();
+  /**Small audio play button**/
+(function setupAudioButton(){
+  const audio = document.getElementById('bgAudio');
+  const playBtn = document.getElementById('playAudioBtn');
+  if (!audio || !playBtn) return;
 
-    // Audio play button
-    (function setupAudioButton(){
-      const audio = document.getElementById('bgAudio');
-      const playBtn = document.getElementById('playAudioBtn');
-      if (!audio || !playBtn) return;
+  audio.loop = true;
+  audio.volume = 0.9;
 
-      audio.loop = true;
-      audio.volume = 0.9;
-
-      playBtn.addEventListener('click', () => {
-        audio.play().catch(() => {});
-        playBtn.textContent = '🔊';
-        playBtn.disabled = true;
-        playBtn.style.opacity = '0.7';
-      });
-    })();
-
+  playBtn.addEventListener('click', () => {
+    audio.play().catch(() => {});
+    playBtn.textContent = '🔊 Playing';
+    playBtn.disabled = true;
+    playBtn.style.opacity = '0.7';
+  });
+})();
     // Blessings form
     (function setupForm(){
       const form = document.getElementById('wishForm');
