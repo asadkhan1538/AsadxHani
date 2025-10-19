@@ -37,21 +37,30 @@
 
         /* extra styles for heart text */
         .heart-name {
-            background-image: linear-gradient(90deg, #ff8ab0 0%, #ff3d6b 40%, #ffb86b 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 6px 18px rgba(236, 72, 153, 0.18), 0 2px 6px rgba(0, 0, 0, 0.6);
-            letter-spacing: 0.8px;
-        }
-        .heart-sub {
-            background-image: linear-gradient(90deg, #ffd28a 0%, #ffb86b 60%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 4px 10px rgba(245, 158, 11, 0.12), 0 1px 3px rgba(0, 0, 0, 0.5);
-            letter-spacing: 0.6px;
-        }
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    font-size: 2.75rem; /* Adjust as needed */
+    color: #facc15; /* Tailwind's yellow-400 */
+    text-shadow:
+        0 0 5px #facc15,
+        0 0 10px #fbbf24,
+        0 0 15px #f59e0b,
+        1px 1px 2px rgba(0,0,0,0.4);
+    letter-spacing: 1px;
+    transform: rotate(-2deg);
+    animation: gentleBreathe 4s ease-in-out infinite;
+}
+
+.heart-sub {
+    font-family: 'Cinzel', serif;
+    font-size: 1.25rem;
+    color: #fde68a; /* Tailwind's yellow-200 */
+    text-shadow:
+        0 0 4px #fde68a,
+        0 0 8px #fcd34d,
+        1px 1px 2px rgba(0,0,0,0.3);
+    letter-spacing: 0.5px;
+}
 
         /* ensure body keeps dark background */
         body { background-color: #0a0a0a; }
@@ -236,8 +245,8 @@
                 }
 
                 const recipient = 'haniyakhanim@gmail.com';
-                const subject = `Happy Birthday Haniya ❤️🥰`;
-                const body = `Dearest Haniya,\n\nYou have received a new birthday wish!\n\nFrom: ${name}\n\nMessage:\n${wish}\n\n---\nSent from your birthday website.`;
+                const subject = `Birthday Wish`;
+                const body = `Dear Haniya,\n\nHappiest Birthday To You. May You Live Long 🥰❤️\n\nFrom: ${name}\n\nMessage:\n${wish}\n\n---\nSent from your birthday website.`;
                 const mailtoLink = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
                 window.location.href = mailtoLink;
             };
