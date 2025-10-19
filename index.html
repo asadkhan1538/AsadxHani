@@ -275,8 +275,8 @@ Asad</div>
     </div>
 
     <!-- Background audio (autoplay on gesture) -->
-    <audio id="bgAudio" preload="auto" loop>
-      <source src="https://raw.githubusercontent.com/asadkhan1538/AsadxHani/main/birthdaysongsforhaniadownloadhappybirthdayhaniason.mp3" type="audio/mpeg">
+    <audio id="bgAudio" preload="auto" loop controls style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:1000; opacity:0; pointer-events:none;">
+  <source src="https://raw.githubusercontent.com/asadkhan1538/AsadxHani/main/birthdaysongsforhaniadownloadhappybirthdayhaniason.mp3" type="audio/mpeg">
     </audio>
   </div>
 
@@ -317,25 +317,26 @@ Asad</div>
 
     // Audio trigger on first gesture
     (function setupAudioTrigger(){
-      const audio = document.getElementById('bgAudio');
-      if (!audio) return;
-      audio.loop = true;
-      audio.volume = 0.9;
-      let started = false;
+  const audio = document.getElementById('bgAudio');
+  if (!audio) return;
 
-      function startAudio() {
-        if (started) return;
-        started = true;
-        audio.play().catch(() => {});
-        document.removeEventListener('click', startAudio);
-        document.removeEventListener('touchstart', startAudio);
-        document.removeEventListener('keydown', startAudio);
-      }
+  audio.loop = true;
+  audio.volume = 0.9;
 
-      document.addEventListener('click', startAudio, { once: true });
-      document.addEventListener('touchstart', startAudio, { once: true });
-      document.addEventListener('keydown', startAudio, { once: true });
-    })();
+  let started = false;
+
+  function startAudio() {
+    if (started) return;
+    started = true;
+    audio.play().catch(() => {});
+  }
+
+  // Attach to a visible element
+  const triggerArea = document.getElementById('pageRoot');
+  triggerArea.addEventListener('click', startAudio, { once: true });
+  triggerArea.addEventListener('touchstart', startAudio, { once: true });
+  triggerArea.addEventListener('keydown', startAudio, { once: true });
+})();
 
     // Blessings form
     (function setupForm(){
