@@ -36,21 +36,22 @@
         }
 
         /* extra styles for heart text */
-        .heart-name {
+.heart-text {
     font-family: 'Cinzel', serif;
     font-weight: 700;
-    font-size: 2.75rem; /* Adjust as needed */
-    color: #facc15; /* Tailwind's yellow-400 */
+    color: #facc15; /* Tailwind yellow-400 */
     text-shadow:
-        0 0 5px #facc15,
-        0 0 10px #fbbf24,
-        0 0 15px #f59e0b,
-        1px 1px 2px rgba(0,0,0,0.4);
+        0 0 6px #facc15,
+        0 0 12px #fbbf24,
+        0 0 18px #f59e0b;
+    font-size: 2.25rem;
+    line-height: 1.2;
     letter-spacing: 1px;
-    transform: rotate(-2deg);
-    animation: gentleBreathe 4s ease-in-out infinite;
+    text-align: center;
+    padding: 0 1rem;
+    word-break: break-word;
+    max-width: 80%;
 }
-
 .heart-sub {
     font-family: 'Cinzel', serif;
     font-size: 1.25rem;
@@ -290,42 +291,53 @@
 
         // MAIN APP COMPONENT (starts immediately, music autoplay)
         const App = () => {
-            const soundcloudUrl = "https://soundcloud.com/user-973102351-106478784/happy-birthday-haniya-two-songs-in-one";
-            const soundcloudPlayerSrc = `https://w.soundcloud.com/player/?url=${encodeURIComponent(soundcloudUrl)}&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false&buying=false`;
+    const soundUrl = "https://soundcloud.com/user-973102351-106478784/happy-birthday-haniya-two-songs-in-one/stream";
 
-            return (
-                React.createElement('div', { className: "relative min-h-screen w-full overflow-hidden font-serif text-white" },
-                    React.createElement(StarryBackground),
-                    React.createElement(LoveEffect),
-                    React.createElement('iframe', {
-                        title: "background-music",
-                        width: "1",
-                        height: "1",
-                        scrolling: "no",
-                        frameBorder: "no",
-                        allow: "autoplay",
-                        src: soundcloudPlayerSrc,
-                        style: { position: 'absolute', top: '-9999px', left: '-9999px' }
-                    }),
-                    React.createElement('main', { className: "relative z-10 flex min-h-screen flex-col items-center justify-center p-4 py-16 text-center" },
-                        React.createElement('div', { className: "relative z-10 text-center animate-fadeIn p-4 mb-6" },
-                            React.createElement('h1', { className: "text-4xl md:text-5xl font-display text-amber-200 animate-celebrateGlow mb-4" }, "Birthday Girl Haniya")
-                        ),
-                        React.createElement(Celebration),
-                        React.createElement(BlessingsForm)
-                    )
-                )
-            );
-        };
+    return (
+        React.createElement('div', { className: "relative min-h-screen w-full overflow-hidden font-serif text-white bg-[#0a0a0a]" },
+            // Hidden audio element
+            React.createElement('audio', {
+                id: "birthday-audio",
+                src: soundUrl,
+                preload: "auto"
+            }),
 
-        // RENDER THE APP
-        const rootElement = document.getElementById('root');
-        if (!rootElement) {
-            throw new Error("Could not find root element to mount to");
-        }
-        const root = ReactDOM.createRoot(rootElement);
-        root.render(React.createElement(React.StrictMode, null, React.createElement(App)));
+            // Background effects
+            React.createElement(StarryBackground),
+            React.createElement(LoveEffect),
 
+            // Main content
+            React.createElement('main', { className: "relative z-10 flex min-h-screen flex-col items-center justify-center p-4 py-16 text-center" },
+                React.createElement('div', { className: "relative z-10 text-center animate-fadeIn p-4 mb-6" },
+                    React.createElement('h1', { className: "text-4xl md:text-5xl font-display text-amber-200 animate-celebrateGlow mb-4" }, "Birthday Girl Haniya")
+                ),
+                React.createElement(Celebration),
+                React.createElement(BlessingsForm)
+            ),
+
+            // Audio play button
+            React.createElement('div', {
+                className: "fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50"
+            },
+                React.createElement('button', {
+                    onClick: () => {
+                        const audio = document.getElementById('birthday-audio');
+                        if (audio) audio.play();
+                    },
+                    className: "bg-gradient-to-r from-amber-400 to-amber-600 text-black font-bold font-display px-6 py-3 rounded-full shadow-lg hover:scale-105 transition-all"
+                }, "▶ Play Birthday Song")
+            )
+        )
+    );
+};
+
+// RENDER THE APP
+const rootElement = document.getElementById('root');
+if (!rootElement) {
+    throw new Error("Could not find root element to mount to");
+}
+const root = ReactDOM.createRoot(rootElement);
+root.render(React.createElement(React.StrictMode, null, React.createElement(App)));
     </script>
 </body>
 </html>
