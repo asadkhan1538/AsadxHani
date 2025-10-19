@@ -12,151 +12,77 @@
       --bg:#0a0a0a;
       --yellow:#facc15;
       --yellow-2:#fbbf24;
+      --accent:#ff5a8f;
     }
 
-    html,body {
-      height:100%;
-      margin:0;
-      background:var(--bg);
-      color:#fff;
-      font-family: "Cinzel", serif;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
-    }
+    html,body{height:100%;margin:0;background:var(--bg);color:#fff;font-family:"Cinzel",serif;overflow:hidden;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 
-    /* Page layout */
-    .page {
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:2.5rem 1rem;
-      box-sizing:border-box;
-      position:relative;
-      overflow:hidden;
-      text-align:center;
-    }
+    /* page layout */
+    .page{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:2.5rem 1rem;box-sizing:border-box;position:relative;overflow:hidden}
+    .center-col{z-index:3;display:flex;flex-direction:column;align-items:center;gap:1.4rem;text-align:center;width:100%;max-width:1100px}
 
-    .column {
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:1.25rem;
-      z-index:2;
-      width:100%;
-      max-width:980px;
-    }
+    .top-title{color:#f8e7b0;font-size:2rem;letter-spacing:.12em;margin:0;text-transform:uppercase;text-shadow:0 0 12px rgba(252,210,87,0.5)}
 
-    .title {
-      color: #f8e7b0;
-      font-size:2rem;
-      letter-spacing:0.12em;
-      margin:0;
-      text-transform:uppercase;
-      text-shadow: 0 0 12px rgba(252,210,87,0.5);
-    }
+    /* floating particles container */
+    .particles{position:absolute;inset:0;pointer-events:none;z-index:1}
 
-    /* Heart (no extra background container) */
-    .heart-size {
-      width: 20rem;
-      height: 20rem;
-      position: relative;
-    }
-    @media(min-width:768px){ .heart-size { width:26rem; height:26rem; } }
-    @media(min-width:1200px){ .heart-size { width:34rem; height:34rem; } }
+    .star{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.9;filter:drop-shadow(0 0 4px rgba(255,255,255,.08));animation:floatUp linear infinite}
+    .heart-particle{position:absolute;font-size:16px;color:var(--accent);opacity:.8;text-shadow:0 0 6px currentColor;animation:floatUp linear infinite}
 
-    svg.heart { width:100%; height:100%; display:block; }
+    @keyframes floatUp{0%{transform:translateY(0) scale(1);opacity:1}100%{transform:translateY(-120vh) scale(.98);opacity:0}}
+    @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+    @keyframes pulse{0%,100%{transform:scale(1)}25%{transform:scale(1.06)}50%{transform:scale(0.98)}75%{transform:scale(1.03)}}
 
-    /* Strict monochrome yellow centered text inside heart */
-    .heart-text {
-      position:absolute;
-      top:50%;
-      left:50%;
-      transform: translate(-50%,-50%);
-      color: var(--yellow);
-      font-weight:700;
-      font-family: "Cinzel", serif;
-      text-align:center;
-      letter-spacing:0.6px;
-      line-height:0.95;
-      white-space:pre-wrap;
-      max-width:78%;
+    /* floating heart (no background container behind, floats visually) */
+    .heart-wrap{position:relative;width:20rem;height:20rem;display:block;animation:breathe 4s ease-in-out infinite;z-index:3}
+    @media(min-width:768px){.heart-wrap{width:26rem;height:26rem}}
+    @media(min-width:1200px){.heart-wrap{width:34rem;height:34rem}}
+
+    svg.heart{width:100%;height:100%;display:block;filter:drop-shadow(0 18px 40px rgba(0,0,0,0.55))}
+
+    /* centered monochrome yellow text inside heart */
+    .heart-text{
+      position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+      color:var(--yellow);font-weight:700;font-family:"Cinzel",serif;
+      text-align:center;line-height:0.95;white-space:pre-wrap;max-width:78%;
       -webkit-text-stroke:0.4px rgba(0,0,0,0.25);
       text-shadow:
         0 0 6px rgba(250,204,21,0.98),
         0 0 12px rgba(251,191,36,0.85),
         0 6px 18px rgba(0,0,0,0.45);
-      font-size:2rem;
-      pointer-events:none;
+      font-size:2rem;pointer-events:none;z-index:4;
+      transition:transform .35s ease;
     }
-    @media(min-width:640px){ .heart-text{ font-size:2.6rem; } }
-    @media(min-width:1024px){ .heart-text{ font-size:3.6rem; } }
+    @media(min-width:640px){.heart-text{font-size:2.6rem}}
+    @media(min-width:1024px){.heart-text{font-size:3.6rem}}
 
-    .subtitle {
-      color: #f6e7b0;
-      font-size:1.35rem;
-      margin:0;
-      text-shadow: 0 0 16px rgba(250,204,21,0.22);
-    }
+    .subtitle{color:#f6e7b0;font-size:1.25rem;margin:0;text-shadow:0 0 12px rgba(250,204,21,0.18);z-index:3}
 
-    /* Blessings form */
-    .card {
-      width:100%;
-      max-width:720px;
-      margin-top:0.6rem;
-      padding:1.2rem;
-      border-radius:12px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-      border:1px solid rgba(255,200,60,0.04);
-    }
-    .card h3{ margin:0 0 0.6rem 0; color:var(--yellow); font-size:1.05rem; letter-spacing:0.02em; }
-    label { display:block; color: rgba(250,215,100,0.95); margin-bottom:0.35rem; font-weight:600; font-size:0.95rem; }
-    input, textarea {
-      width:100%;
-      padding:0.8rem 1rem;
-      border-radius:8px;
-      border:1px solid rgba(250,200,21,0.06);
-      background: rgba(255,255,255,0.03);
-      color:#fff;
-      box-sizing:border-box;
-      font-size:1rem;
-      resize:vertical;
-    }
-    button.send {
-      width:100%;
-      margin-top:0.6rem;
-      padding:0.9rem;
-      background: linear-gradient(90deg,var(--yellow), #f59e0b);
-      color:#000;
-      font-weight:800;
-      border-radius:10px;
-      border:none;
-      cursor:pointer;
-      box-shadow:0 10px 30px rgba(250,200,21,0.16);
-    }
-    button.send:hover { filter:brightness(0.98); transform:translateY(-1px); }
+    /* form */
+    .card{width:100%;max-width:720px;margin-top:.8rem;padding:1.2rem;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:0 10px 30px rgba(0,0,0,0.6);border:1px solid rgba(255,200,60,0.04);z-index:3}
+    .card h3{margin:0 0 .6rem 0;color:var(--yellow);font-size:1.05rem;letter-spacing:.02em}
+    label{display:block;color:rgba(250,215,100,0.95);margin-bottom:.35rem;font-weight:600;font-size:.95rem}
+    input,textarea{width:100%;padding:.8rem 1rem;margin-bottom:12px;border-radius:8px;border:1px solid rgba(250,200,21,0.06);background:rgba(255,255,255,0.03);color:#fff;font-size:1rem;box-sizing:border-box;resize:vertical}
+    button.send{width:100%;padding:.9rem;background:linear-gradient(90deg,var(--yellow),#f59e0b);color:#000;font-weight:800;border:none;border-radius:10px;cursor:pointer;box-shadow:0 10px 30px rgba(250,200,21,0.16);}
 
-    /* Invisible gesture overlay to guarantee audio start on first user interaction */
-    .gesture-overlay {
-      position:fixed;
-      inset:0;
-      z-index:5;
-      background:transparent;
-      display:block;
-      cursor:auto;
-    }
-    .hidden { display:none !important; }
+    /* small floating play button bottom center */
+    .play-area{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:6}
+    .play-btn{background:linear-gradient(90deg,var(--yellow),#f59e0b);color:#000;border:none;padding:.6rem 1rem;border-radius:999px;font-weight:800;cursor:pointer;box-shadow:0 8px 22px rgba(250,200,21,0.16)}
+    .play-btn:active{transform:translateY(1px)}
 
+    /* responsive tweaks */
+    @media(max-width:420px){.heart-text{font-size:1.5rem}}
   </style>
 </head>
 <body>
   <div class="page">
-    <div class="column">
-      <h1 class="title">Birthday Girl Haniya</h1>
+    <div class="particles" id="particles"></div>
 
-      <!-- Heart with centered text (no background container beyond this) -->
-      <div class="heart-size" aria-hidden="false">
+    <div class="center-col">
+      <h2 class="top-title">Birthday Girl Haniya</h2>
+
+      <!-- Floating heart (no background container behind it) -->
+      <div class="heart-wrap" aria-hidden="false">
         <svg class="heart" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Heart">
           <defs>
             <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -164,16 +90,14 @@
               <stop offset="60%" stop-color="#ff4d6b"/>
               <stop offset="100%" stop-color="#ffb86b"/>
             </linearGradient>
-            <filter id="blur" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="6" result="b"/>
-              <feBlend in="SourceGraphic" in2="b"/>
-            </filter>
           </defs>
-          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
-                fill="url(#grad)" filter="url(#blur)"/>
+          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5
+            2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3
+            16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            fill="url(#grad)"/>
         </svg>
 
-        <div class="heart-text" aria-hidden="false">Haniya
+        <div class="heart-text" id="heartText">Haniya
 &amp;
 Asad</div>
       </div>
@@ -187,7 +111,7 @@ Asad</div>
           <label for="name">Your Name</label>
           <input id="name" name="name" placeholder="Write your beautiful name here..." required>
 
-          <label for="wish" style="margin-top:0.6rem;">Your Wish</label>
+          <label for="wish">Your Wish</label>
           <textarea id="wish" name="wish" rows="4" placeholder="Write your heartfelt message here..." required></textarea>
 
           <button class="send" type="submit">Send Blessing</button>
@@ -195,80 +119,96 @@ Asad</div>
       </div>
     </div>
 
-    <!-- Audio element (raw.githubusercontent direct URL) -->
-    <audio id="birthday-audio" crossorigin="anonymous" loop playsinline>
+    <!-- Play button bottom center -->
+    <div class="play-area">
+      <button id="playBtn" class="play-btn" aria-label="Play Audio">▶ Play Audio</button>
+    </div>
+
+    <!-- Audio element using raw GitHub URL -->
+    <audio id="bgAudio" preload="auto" crossorigin="anonymous">
       <source src="https://raw.githubusercontent.com/asadkhan1538/AsadxHani/main/birthdaysongsforhaniadownloadhappybirthdayhaniason.mp3" type="audio/mpeg">
       Your browser does not support the audio element.
     </audio>
-
-    <!-- Invisible full-page overlay to capture first user gesture and start audio -->
-    <div id="gestureOverlay" class="gesture-overlay" aria-hidden="true"></div>
   </div>
 
   <script>
-    // Start audio on first user gesture if autoplay is blocked.
-    (function() {
-      const audio = document.getElementById('birthday-audio');
-      let started = false;
+    // Smooth animated background: generate stars and heart particles
+    (function createParticles(){
+      const container = document.getElementById('particles');
+      const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+      const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
 
-      function startAudio() {
-        if (started) return;
-        started = true;
-        // Try to play; ignore errors
-        audio.volume = 0.9;
-        const p = audio.play();
-        if (p && p.catch) {
-          p.catch(() => { /* autoplay blocked despite gesture; nothing else to do */ });
-        }
-        // remove overlay so it's not blocking anything
-        const overlay = document.getElementById('gestureOverlay');
-        if (overlay) overlay.classList.add('hidden');
-        // remove listeners
-        window.removeEventListener('click', startAudio);
-        window.removeEventListener('touchstart', startAudio);
-        window.removeEventListener('keydown', startAudio);
+      // stars
+      for (let i=0;i<60;i++){
+        const s = document.createElement('div');
+        s.className = 'star';
+        const size = Math.random()*2 + 1;
+        s.style.width = s.style.height = size + 'px';
+        s.style.left = (Math.random()*100) + 'vw';
+        s.style.top = (Math.random()*100) + 'vh';
+        s.style.opacity = (Math.random()*0.7 + 0.2).toString();
+        s.style.animationDuration = (18 + Math.random()*22) + 's';
+        s.style.animationDelay = (-Math.random()*20) + 's';
+        container.appendChild(s);
       }
 
-      // Attempt autoplay once immediately
-      const tryAutoplay = audio.play();
-      if (tryAutoplay && tryAutoplay.catch) {
-        tryAutoplay.catch(() => {
-          // Autoplay blocked; wait for first user gesture
-          window.addEventListener('click', startAudio, { once: true });
-          window.addEventListener('touchstart', startAudio, { once: true });
-          window.addEventListener('keydown', startAudio, { once: true });
-          // keep overlay active until gesture
-        });
-      } else {
-        // autoplay worked — hide overlay immediately
-        const overlay = document.getElementById('gestureOverlay');
-        if (overlay) overlay.classList.add('hidden');
-        started = true;
-      }
-
-      // Also allow overlay click to start audio (some browsers require interaction on visible element)
-      const overlay = document.getElementById('gestureOverlay');
-      if (overlay) {
-        overlay.addEventListener('click', startAudio, { once: true });
-        overlay.addEventListener('touchstart', startAudio, { once: true });
+      // floating hearts
+      const heartColors = ['#ef4444','#ec4899','#f59e0b'];
+      for (let i=0;i<28;i++){
+        const h = document.createElement('div');
+        h.className = 'heart-particle';
+        h.innerText = '♥';
+        h.style.left = (Math.random()*100) + 'vw';
+        h.style.top = (Math.random()*100) + 'vh';
+        h.style.fontSize = (10 + Math.random()*28) + 'px';
+        h.style.color = heartColors[Math.floor(Math.random()*heartColors.length)];
+        h.style.animationDuration = (14 + Math.random()*18) + 's';
+        h.style.animationDelay = (-Math.random()*16) + 's';
+        container.appendChild(h);
       }
     })();
 
-    // Form handling: open mailto with desired subject
+    // Play audio on button click. Keep button small and center bottom.
+    const audio = document.getElementById('bgAudio');
+    const playBtn = document.getElementById('playBtn');
+
+    playBtn.addEventListener('click', async () => {
+      try {
+        // set reasonable volume and loop
+        audio.volume = 0.9;
+        audio.loop = true;
+        await audio.play();
+        // feedback: change button to indicate playing
+        playBtn.textContent = '🔊 Playing';
+        playBtn.disabled = true;
+        playBtn.style.opacity = '0.95';
+      } catch (err) {
+        // if play fails, enable user to try again
+        console.warn('Audio play failed:', err);
+        playBtn.textContent = '▶ Play Audio';
+        playBtn.disabled = false;
+      }
+    });
+
+    // Blessings form mailto with subject
     document.getElementById('wishForm').addEventListener('submit', function(e){
       e.preventDefault();
       const name = document.getElementById('name').value.trim();
       const wish = document.getElementById('wish').value.trim();
-      if (!name || !wish) {
-        alert('Please enter your name and wish.');
-        return;
-      }
+      if (!name || !wish) { alert('Please fill both fields.'); return; }
       const recipient = 'haniyakhanim@gmail.com';
       const subject = 'Happy Birthday Haniya ❤️🥰';
       const body = `Dearest Haniya,%0D%0A%0D%0AYou have received a new birthday wish!%0D%0A%0D%0AFrom: ${encodeURIComponent(name)}%0D%0A%0D%0AMessage:%0D%0A${encodeURIComponent(wish)}%0D%0A%0D%0A---%0D%0ASent from your birthday website.`;
-      // Use location.href to open mail client
       window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${body}`;
     });
+
+    // Optional: small hover pulse on heart text for life
+    const heartText = document.getElementById('heartText');
+    heartText.addEventListener('mouseover', ()=> heartText.style.transform = 'translate(-50%,-50%) scale(1.03)');
+    heartText.addEventListener('mouseout',  ()=> heartText.style.transform = 'translate(-50%,-50%) scale(1)');
+
+    // Accessibility: allow Enter key to trigger audio when focused
+    playBtn.addEventListener('keyup', (e) => { if (e.key === 'Enter') playBtn.click(); });
   </script>
 </body>
 </html>
