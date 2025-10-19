@@ -227,7 +227,7 @@
     resize: vertical;
   }
 
-  button.send {
+button.send {
     width: 100%;
     padding: 0.9rem;
     background: linear-gradient(90deg, var(--yellow), var(--amber));
@@ -258,9 +258,7 @@
 
     <div class="center-col" id="mainCol">
       <h2 class="top-title">Birthday Girl Haniya</h2>
-<div class="audio-button-wrap">
-  <button id="playAudioBtn" class="audio-button" aria-label="Play birthday music">🎵 Play Music</button>
-</div>
+
       <div class="heart-wrap" aria-hidden="false">
         <svg class="heart" viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Heart">
           <defs>
@@ -298,9 +296,12 @@ Asad</div>
       </div>
     </div>
 
-    <!-- Background audio (autoplay on gesture) -->
-    <audio id="bgAudio" preload="auto" loop controls style="position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:1000; opacity:0; pointer-events:none;">
-  <source src="https://raw.githubusercontent.com/asadkhan1538/AsadxHani/main/birthdaysongsforhaniadownloadhappybirthdayhaniason.mp3" type="audio/mpeg">
+    <!-- Small audio play button fixed at bottom right -->
+    <button id="playAudioBtn" class="audio-button" aria-label="Play birthday music">🎵</button>
+
+    <!-- Background audio -->
+    <audio id="bgAudio" preload="auto" loop>
+      <source src="https://raw.githubusercontent.com/asadkhan1538/AsadxHani/main/birthdaysongsforhaniadownloadhappybirthdayhaniason.mp3" type="audio/mpeg">
     </audio>
   </div>
 
@@ -339,29 +340,22 @@ Asad</div>
       }
     })();
 
-    // Audio trigger on first gesture
+    // Audio play button
     (function setupAudioButton(){
-  const audio = document.getElementById('bgAudio');
-  const playBtn = document.getElementById('playAudioBtn');
-  if (!audio || !playBtn) return;
+      const audio = document.getElementById('bgAudio');
+      const playBtn = document.getElementById('playAudioBtn');
+      if (!audio || !playBtn) return;
 
-  audio.loop = true;
-  audio.volume = 0.9;
+      audio.loop = true;
+      audio.volume = 0.9;
 
-  playBtn.addEventListener('click', () => {
-    audio.play().catch(() => {});
-    playBtn.textContent = '🔊 Playing';
-    playBtn.disabled = true;
-    playBtn.style.opacity = '0.8';
-  });
-})();
-
-  // Attach to a visible element
-  const triggerArea = document.getElementById('pageRoot');
-  triggerArea.addEventListener('click', startAudio, { once: true });
-  triggerArea.addEventListener('touchstart', startAudio, { once: true });
-  triggerArea.addEventListener('keydown', startAudio, { once: true });
-})();
+      playBtn.addEventListener('click', () => {
+        audio.play().catch(() => {});
+        playBtn.textContent = '🔊';
+        playBtn.disabled = true;
+        playBtn.style.opacity = '0.7';
+      });
+    })();
 
     // Blessings form
     (function setupForm(){
@@ -376,7 +370,7 @@ Asad</div>
         }
         const recipient = 'haniyakhanim@gmail.com';
         const subject = 'Birthday Wish';
-        const body = `Dear Haniya,\n\nHappiest Birthday to you from the cores of my Heart!\n\nFrom: ${name}\n\nMessage: ${wish}`;
+        const body = `Dear Haniya, Happiest Birthday to you from the cores of my Heart! From: ${name} Message: ${wish}`;
         window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       });
     })();
