@@ -15,7 +15,7 @@
       --accent:#ff5a8f;
     }
 
-    html,body {
+    html,body{
       height:100%;
       margin:0;
       background:var(--bg);
@@ -23,9 +23,10 @@
       font-family:"Cinzel",serif;
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
-      overflow-y:auto; /* Page is scrollable */
+      overflow-y:auto; /* page scrollable */
     }
 
+    /* Layout */
     .page {
       min-height:100vh;
       display:flex;
@@ -36,10 +37,11 @@
       position:relative;
       overflow:visible;
       text-align:center;
+      cursor:default;
     }
 
     .center-col {
-      z-index:3;
+      z-index:4;
       display:flex;
       flex-direction:column;
       align-items:center;
@@ -58,7 +60,7 @@
       text-shadow:0 0 12px rgba(252,210,87,0.5);
     }
 
-    /* Animated particles container (behind everything) */
+    /* Particles (fixed, behind everything) */
     .particles {
       position:fixed;
       inset:0;
@@ -69,8 +71,7 @@
 
     .star {
       position:absolute;
-      width:2px;
-      height:2px;
+      width:2px; height:2px;
       border-radius:50%;
       background:#fff;
       opacity:.9;
@@ -91,25 +92,15 @@
       0% { transform: translateY(0) scale(1); opacity:1; }
       100% { transform: translateY(-140vh) scale(.98); opacity:0; }
     }
+    @keyframes breathe { 0%,100% { transform:scale(1) } 50% { transform:scale(1.03) } }
 
-    @keyframes breathe {
-      0%,100% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-    }
-
-    @keyframes heartBeat {
-      0%,100% { transform: scale(1); }
-      10%,30% { transform: scale(1.08); }
-    }
-
-    /* Floating heart (visually floating on page) */
+    /* Heart (floating look) */
     .heart-wrap {
       position:relative;
-      width:20rem;
-      height:20rem;
+      width:20rem; height:20rem;
       display:block;
       animation:breathe 4s ease-in-out infinite;
-      z-index:4;
+      z-index:5;
       margin-top:1rem;
     }
     @media(min-width:768px){ .heart-wrap{ width:26rem; height:26rem } }
@@ -117,11 +108,10 @@
 
     svg.heart { width:100%; height:100%; display:block; filter:drop-shadow(0 18px 40px rgba(0,0,0,0.55)); }
 
-    /* Monochrome yellow centered text inside heart */
+    /* Heart text centered, monochrome yellow */
     .heart-text {
       position:absolute;
-      top:50%;
-      left:50%;
+      top:50%; left:50%;
       transform:translate(-50%,-50%);
       color:var(--yellow);
       font-weight:700;
@@ -130,7 +120,7 @@
       line-height:0.95;
       white-space:pre-wrap;
       max-width:78%;
-      -webkit-text-stroke:0.4px rgba(0,0,0,0.25);
+      -webkit-text-stroke:0.35px rgba(0,0,0,0.22);
       text-shadow:
         0 0 6px rgba(250,204,21,0.98),
         0 0 12px rgba(251,191,36,0.85),
@@ -138,7 +128,7 @@
       font-size:2rem;
       pointer-events:none;
       transition:transform .28s ease;
-      z-index:5;
+      z-index:6;
     }
     @media(min-width:640px){ .heart-text{ font-size:2.6rem } }
     @media(min-width:1024px){ .heart-text{ font-size:3.6rem } }
@@ -148,19 +138,18 @@
       font-size:1.25rem;
       margin:0;
       text-shadow:0 0 12px rgba(250,204,21,0.18);
-      z-index:3;
+      z-index:4;
     }
 
-    /* Floating, dynamic blessings form */
+    /* Floating blessing card */
     .wish-wrap {
       position:relative;
       width:100%;
       display:flex;
       align-items:center;
       justify-content:center;
-      z-index:4;
+      z-index:5;
       margin-top:1.2rem;
-      transform-origin:center;
     }
 
     .card {
@@ -184,17 +173,22 @@
       width:100%; padding:.9rem; background:linear-gradient(90deg, var(--yellow), var(--amber)); color:#000; font-weight:800; border:none; border-radius:10px; cursor:pointer; box-shadow:0 12px 36px rgba(250,200,21,0.14);
     }
 
-    /* subtle motion hint when pointer moves to make card dynamic */
-    .card.dynamic {
-      will-change: transform;
+    /* Full-page invisible button overlay (click anywhere) */
+    .page-button {
+      position:fixed;
+      inset:0;
+      z-index:1000; /* on top of everything */
+      background:transparent;
+      cursor:pointer;
     }
+    .page-button.hidden { display:none !important; }
 
-    /* Accessibility helpers */
+    /* small helper */
     .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
   </style>
 </head>
 <body>
-  <div class="page" id="pageRoot" tabindex="0" role="application" aria-label="Birthday celebration page">
+  <div class="page" id="pageRoot" role="application" aria-label="Birthday celebration page">
     <div class="particles" id="particles" aria-hidden="true"></div>
 
     <div class="center-col" id="mainCol">
@@ -237,107 +231,134 @@ Asad</div>
       </div>
     </div>
 
-    <!-- Background audio: raw GitHub direct URL -->
+    <!-- Background audio (raw GitHub) -->
     <audio id="bgAudio" preload="auto" crossorigin="anonymous">
       <source src="https://raw.githubusercontent.com/asadkhan1538/AsadxHani/main/birthdaysongsforhaniadownloadhappybirthdayhaniason.mp3" type="audio/mpeg">
       Your browser does not support the audio element.
     </audio>
+
+    <!-- Invisible full-page button: acts as the single gesture target. Removed after first use. -->
+    <button id="pageBtn" class="page-button" aria-label="Start audio"></button>
   </div>
 
   <script>
-    // Particles generation (efficient)
+    /***** Particles: stars and hearts (efficient) *****/
     (function createParticles(){
       const container = document.getElementById('particles');
       const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
       const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
 
-      // Stars
-      const starCount = Math.min(80, Math.floor(vw / 10));
+      // stars (count relative to width)
+      const starCount = Math.min(100, Math.max(40, Math.floor(vw / 10)));
       for (let i = 0; i < starCount; i++) {
-        const s = document.createElement('div');
-        s.className = 'star';
-        const size = Math.random() * 2 + 1;
-        s.style.width = s.style.height = size + 'px';
-        s.style.left = (Math.random() * 100) + 'vw';
-        s.style.top = (Math.random() * 100) + 'vh';
-        s.style.opacity = (Math.random() * 0.6 + 0.2).toString();
-        s.style.animationDuration = (18 + Math.random() * 26) + 's';
-        s.style.animationDelay = (-Math.random() * 30) + 's';
-        container.appendChild(s);
+        const el = document.createElement('div');
+        el.className = 'star';
+        const size = Math.random()*2 + 1;
+        el.style.width = el.style.height = size + 'px';
+        el.style.left = (Math.random()*100) + 'vw';
+        el.style.top = (Math.random()*100) + 'vh';
+        el.style.opacity = (Math.random()*0.7 + 0.15).toString();
+        el.style.animationDuration = (18 + Math.random()*26) + 's';
+        el.style.animationDelay = (-Math.random()*30) + 's';
+        container.appendChild(el);
       }
 
-      // Floating hearts
+      // hearts that float
+      const heartCount = Math.min(40, Math.max(18, Math.floor(vw / 30)));
       const heartColors = ['#ef4444','#ec4899','#f59e0b'];
-      for (let i = 0; i < 36; i++) {
-        const h = document.createElement('div');
-        h.className = 'heart-particle';
-        h.innerText = '♥';
-        h.style.left = (Math.random() * 100) + 'vw';
-        h.style.top = (Math.random() * 100) + 'vh';
-        h.style.fontSize = (10 + Math.random() * 28) + 'px';
-        h.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
-        h.style.animationDuration = (14 + Math.random() * 22) + 's';
-        h.style.animationDelay = (-Math.random() * 18) + 's';
-        container.appendChild(h);
+      for (let i = 0; i < heartCount; i++) {
+        const el = document.createElement('div');
+        el.className = 'heart-particle';
+        el.textContent = '♥';
+        el.style.left = (Math.random()*100) + 'vw';
+        el.style.top = (Math.random()*100) + 'vh';
+        el.style.fontSize = (10 + Math.random()*28) + 'px';
+        el.style.color = heartColors[Math.floor(Math.random()*heartColors.length)];
+        el.style.animationDuration = (14 + Math.random()*22) + 's';
+        el.style.animationDelay = (-Math.random()*18) + 's';
+        container.appendChild(el);
       }
     })();
 
-    // Make entire page act like a play button on first interaction. Keeps playing once started.
-    (function setupPlayOnFirstInteraction(){
+    /***** Make the whole page act like a button to start audio (first gesture) *****/
+    (function setupFullPagePlay(){
+      const pageBtn = document.getElementById('pageBtn');
       const audio = document.getElementById('bgAudio');
-      audio.loop = true;
-      audio.volume = 0.9;
       let started = false;
 
-      async function tryPlay() {
+      // Prepare audio defaults
+      audio.loop = true;
+      audio.volume = 0.9;
+
+      // Unified start function - will try to play and then remove the overlay button
+      async function startAudioAndRemove(e) {
         if (started) return;
         started = true;
-        try { await audio.play(); } catch(e) {
-          // ignore errors; audio will remain ready and will play after gestures
+
+        try {
+          // Calling play on gesture
+          await audio.play();
+        } catch (err) {
+          // ignore play rejection; user gesture should allow subsequent plays
+          try { audio.play().catch(()=>{}); } catch {}
         }
-        // remove listeners once attempted
-        window.removeEventListener('click', onFirstInteraction);
-        window.removeEventListener('touchstart', onFirstInteraction);
-        window.removeEventListener('keydown', onFirstInteraction);
+
+        // Hide and disable the page button so it no longer blocks interactions
+        pageBtn.classList.add('hidden');
+        pageBtn.disabled = true;
+
+        // Remove listeners to avoid memory leaks
+        pageBtn.removeEventListener('click', startAudioAndRemove);
+        pageBtn.removeEventListener('pointerdown', startAudioAndRemove);
+        pageBtn.removeEventListener('touchstart', startAudioAndRemove);
+        window.removeEventListener('keydown', keyHandler);
       }
 
-      function onFirstInteraction(e) {
-        // prevent accidental form submits, but still start audio
-        tryPlay();
+      // Also support keyboard (Enter/Space) if focused
+      function keyHandler(e) {
+        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+          startAudioAndRemove();
+        }
       }
 
-      // try autoplay immediately
-      const attempt = audio.play();
-      if (attempt !== undefined) {
-        attempt.catch(() => {
-          // autoplay blocked, listen for user gesture anywhere
-          window.addEventListener('click', onFirstInteraction, { once: true, passive: true });
-          window.addEventListener('touchstart', onFirstInteraction, { once: true, passive: true });
-          window.addEventListener('keydown', onFirstInteraction, { once: true, passive: true });
-        }).then(() => {
-          // autoplay succeeded
+      // Try an immediate autoplay attempt (may fail)
+      const tryImmediate = audio.play();
+      if (tryImmediate !== undefined) {
+        tryImmediate.then(() => {
+          // autoplay succeeded; remove overlay immediately
+          pageBtn.classList.add('hidden'); pageBtn.disabled = true; started = true;
+        }).catch(() => {
+          // autoplay blocked -> wait for gesture
+          pageBtn.addEventListener('click', startAudioAndRemove, { once: true });
+          pageBtn.addEventListener('pointerdown', startAudioAndRemove, { once: true, passive: true });
+          pageBtn.addEventListener('touchstart', startAudioAndRemove, { once: true, passive: true });
+          window.addEventListener('keydown', keyHandler, { once: true });
         });
       } else {
-        // older browsers: attach listeners
-        window.addEventListener('click', onFirstInteraction, { once: true, passive: true });
-        window.addEventListener('touchstart', onFirstInteraction, { once: true, passive: true });
-        window.addEventListener('keydown', onFirstInteraction, { once: true, passive: true });
+        // fallback: attach gesture listeners
+        pageBtn.addEventListener('click', startAudioAndRemove, { once: true });
+        pageBtn.addEventListener('pointerdown', startAudioAndRemove, { once: true, passive: true });
+        pageBtn.addEventListener('touchstart', startAudioAndRemove, { once: true, passive: true });
+        window.addEventListener('keydown', keyHandler, { once: true });
       }
     })();
 
-    // Blessings form -> mailto with subject
-    document.getElementById('wishForm').addEventListener('submit', function(e){
-      e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const wish = document.getElementById('wish').value.trim();
-      if (!name || !wish) { alert('Please fill both fields.'); return; }
-      const recipient = 'haniyakhanim@gmail.com';
-      const subject = 'Happy Birthday Haniya ❤️🥰';
-      const body = `Dearest Haniya,\n\nYou have received a new birthday wish!\n\nFrom: ${name}\n\nMessage:\n${wish}\n\n---\nSent from your birthday website.`;
-      window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    });
+    /***** Wish form -> mailto *****/
+    (function setupForm(){
+      const form = document.getElementById('wishForm');
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        const name = document.getElementById('name').value.trim();
+        const wish = document.getElementById('wish').value.trim();
+        if (!name || !wish) { alert('Please fill both fields.'); return; }
+        const recipient = 'haniyakhanim@gmail.com';
+        const subject = 'Happy Birthday Haniya ❤️🥰';
+        const body = `Dearest Haniya,\n\nYou have received a new birthday wish!\n\nFrom: ${name}\n\nMessage:\n${wish}\n\n---\nSent from your birthday website.`;
+        window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      });
+    })();
 
-    // Make wish card dynamic and float subtly relative to pointer for life
+    /***** Dynamic card motion (pointer-driven) *****/
     (function dynamicCardMotion(){
       const card = document.querySelector('.card.dynamic');
       if (!card) return;
@@ -347,24 +368,22 @@ Asad</div>
         window.requestAnimationFrame(() => {
           const x = (e.clientX || (e.touches && e.touches[0].clientX) || window.innerWidth/2) - (window.innerWidth/2);
           const y = (e.clientY || (e.touches && e.touches[0].clientY) || window.innerHeight/2) - (window.innerHeight/2);
-          const rx = (y / window.innerHeight) * 6; // tilt by y
-          const ry = (x / window.innerWidth) * -6; // tilt by x
-          const tx = (x / window.innerWidth) * 8; // translate
+          const rx = (y / window.innerHeight) * 6;
+          const ry = (x / window.innerWidth) * -6;
+          const tx = (x / window.innerWidth) * 8;
           card.style.transform = `translateY(-8px) translateX(${tx}px) rotateX(${rx}deg) rotateY(${ry}deg)`;
           ticking = false;
         });
         ticking = true;
       }
-      function reset(){
-        card.style.transform = '';
-      }
+      function reset(){ card.style.transform = ''; }
       window.addEventListener('mousemove', onMove);
       window.addEventListener('touchmove', onMove, { passive:true });
       window.addEventListener('mouseleave', reset);
       window.addEventListener('touchend', reset);
     })();
 
-    // small hover pulse on heart text for life
+    //**** Subtle heart hover pulse *****/
     (function heartHover(){
       const heartText = document.getElementById('heartText');
       if (!heartText) return;
