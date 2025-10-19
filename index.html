@@ -238,7 +238,7 @@ Asad</div>
     <!-- Invisible full-page button: acts as the single gesture target. Removed after first use. -->
     <button id="pageBtn" class="page-button" aria-label="Start audio"></button>
   </div>
- <script>
+       <script>
   /***** Particles: stars and hearts (efficient) *****/
   (function createParticles(){
     const container = document.getElementById('particles');
@@ -275,29 +275,30 @@ Asad</div>
   })();
 
   /***** Full-page audio trigger on first interaction *****/
-(function setupFullPageAudioTrigger(){
-  const audio = document.getElementById('bgAudio');
-  if (!audio) return;
+  (function setupFullPageAudioTrigger(){
+    const audio = document.getElementById('bgAudio');
+    if (!audio) return;
 
-  audio.loop = true;
-  audio.volume = 0.9;
+    audio.loop = true;
+    audio.volume = 0.9;
 
-  let started = false;
+    let started = false;
 
-  function startAudio() {
-    if (started) return;
-    started = true;
-    audio.play().catch(() => {});
-    document.removeEventListener('click', startAudio);
-    document.removeEventListener('touchstart', startAudio);
-    document.removeEventListener('keydown', startAudio);
-  }
+    function startAudio() {
+      if (started) return;
+      started = true;
+      audio.play().catch(() => {});
+      document.removeEventListener('click', startAudio);
+      document.removeEventListener('touchstart', startAudio);
+      document.removeEventListener('keydown', startAudio);
+    }
 
-  // Attach listeners to the whole page
-  document.addEventListener('click', startAudio, { once: true });
-  document.addEventListener('touchstart', startAudio, { once: true });
-  document.addEventListener('keydown', startAudio, { once: true });
-})();
+    // Attach listeners to the whole document
+    document.addEventListener('click', startAudio, { once: true });
+    document.addEventListener('touchstart', startAudio, { once: true });
+    document.addEventListener('keydown', startAudio, { once: true });
+  })();
+
   /***** Wish form -> mailto *****/
   (function setupForm(){
     const form = document.getElementById('wishForm');
@@ -348,6 +349,6 @@ Asad</div>
     heartText.addEventListener('mouseover', ()=> heartText.style.transform = 'translate(-50%,-50%) scale(1.03)');
     heartText.addEventListener('mouseout',  ()=> heartText.style.transform = 'translate(-50%,-50%) scale(1)');
   })();
-     </script>
+        </script>
 </body>
 </html>
