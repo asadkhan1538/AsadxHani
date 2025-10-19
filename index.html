@@ -240,156 +240,126 @@ Asad</div>
     <!-- Invisible full-page button: acts as the single gesture target. Removed after first use. -->
     <button id="pageBtn" class="page-button" aria-label="Start audio"></button>
   </div>
+ <script>
+  /***** Particles: stars and hearts (efficient) *****/
+  (function createParticles(){
+    const container = document.getElementById('particles');
+    const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
 
-  <script>
-    /***** Particles: stars and hearts (efficient) *****/
-    (function createParticles(){
-      const container = document.getElementById('particles');
-      const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-      const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+    const starCount = Math.min(100, Math.max(40, Math.floor(vw / 10)));
+    for (let i = 0; i < starCount; i++) {
+      const el = document.createElement('div');
+      el.className = 'star';
+      const size = Math.random()*2 + 1;
+      el.style.width = el.style.height = size + 'px';
+      el.style.left = (Math.random()*100) + 'vw';
+      el.style.top = (Math.random()*100) + 'vh';
+      el.style.opacity = (Math.random()*0.7 + 0.15).toString();
+      el.style.animationDuration = (18 + Math.random()*26) + 's';
+      el.style.animationDelay = (-Math.random()*30) + 's';
+      container.appendChild(el);
+    }
 
-      // stars (count relative to width)
-      const starCount = Math.min(100, Math.max(40, Math.floor(vw / 10)));
-      for (let i = 0; i < starCount; i++) {
-        const el = document.createElement('div');
-        el.className = 'star';
-        const size = Math.random()*2 + 1;
-        el.style.width = el.style.height = size + 'px';
-        el.style.left = (Math.random()*100) + 'vw';
-        el.style.top = (Math.random()*100) + 'vh';
-        el.style.opacity = (Math.random()*0.7 + 0.15).toString();
-        el.style.animationDuration = (18 + Math.random()*26) + 's';
-        el.style.animationDelay = (-Math.random()*30) + 's';
-        container.appendChild(el);
-      }
+    const heartCount = Math.min(40, Math.max(18, Math.floor(vw / 30)));
+    const heartColors = ['#ef4444','#ec4899','#f59e0b'];
+    for (let i = 0; i < heartCount; i++) {
+      const el = document.createElement('div');
+      el.className = 'heart-particle';
+      el.textContent = '♥';
+      el.style.left = (Math.random()*100) + 'vw';
+      el.style.top = (Math.random()*100) + 'vh';
+      el.style.fontSize = (10 + Math.random()*28) + 'px';
+      el.style.color = heartColors[Math.floor(Math.random()*heartColors.length)];
+      el.style.animationDuration = (14 + Math.random()*22) + 's';
+      el.style.animationDelay = (-Math.random()*18) + 's';
+      container.appendChild(el);
+    }
+  })();
 
-      // hearts that float
-      const heartCount = Math.min(40, Math.max(18, Math.floor(vw / 30)));
-      const heartColors = ['#ef4444','#ec4899','#f59e0b'];
-      for (let i = 0; i < heartCount; i++) {
-        const el = document.createElement('div');
-        el.className = 'heart-particle';
-        el.textContent = '♥';
-        el.style.left = (Math.random()*100) + 'vw';
-        el.style.top = (Math.random()*100) + 'vh';
-        el.style.fontSize = (10 + Math.random()*28) + 'px';
-        el.style.color = heartColors[Math.floor(Math.random()*heartColors.length)];
-        el.style.animationDuration = (14 + Math.random()*22) + 's';
-        el.style.animationDelay = (-Math.random()*18) + 's';
-        container.appendChild(el);
-      }
-    })();
+  /***** Full-page audio trigger on first interaction *****/
+  (function setupFullPageAudioTrigger(){
+    const audio = document.getElementById('bgAudio');
+    if (!audio) return;
 
-    /***** Make the whole page act like a button to start audio (first gesture) *****/
-    (function setupFullPagePlay(){
-      const pageBtn = document.getElementById('pageBtn');
-      const audio = document.getElementById('bgAudio');
-      let started = false;
+    audio.loop = true;
+    audio.volume = 0.9;
 
-      // Prepare audio defaults
-      audio.loop = true;
-      audio.volume = 0.9;
+    let started = false;
 
-      // Unified start function - will try to play and then remove the overlay button
-      async function startAudioAndRemove(e) {
-        if (started) return;
-        started = true;
+    function startAudio() {
+      if (started) return;
+      started = true;
+      audio.play().catch(() => {});
+      window.removeEventListener('click', startAudio);
+      window.removeEventListener('touchstart', startAudio);
+      window.removeEventListener('keydown', startAudio);
+    }
 
-        try {
-          // Calling play on gesture
-          await audio.play();
-        } catch (err) {
-          // ignore play rejection; user gesture should allow subsequent plays
-          try { audio.play().catch(()=>{}); } catch {}
-        }
-
-        // Hide and disable the page button so it no longer blocks interactions
-        pageBtn.classList.add('hidden');
-        pageBtn.disabled = true;
-
-        // Remove listeners to avoid memory leaks
-        pageBtn.removeEventListener('click', startAudioAndRemove);
-        pageBtn.removeEventListener('pointerdown', startAudioAndRemove);
-        pageBtn.removeEventListener('touchstart', startAudioAndRemove);
-        window.removeEventListener('keydown', keyHandler);
-      }
-
-      // Also support keyboard (Enter/Space) if focused
-      function keyHandler(e) {
-        if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
-          startAudioAndRemove();
-        }
-      }
-
-      // Try an immediate autoplay attempt (may fail)
-      const tryImmediate = audio.play();
-      if (tryImmediate !== undefined) {
-        tryImmediate.then(() => {
-          // autoplay succeeded; remove overlay immediately
-          pageBtn.classList.add('hidden'); pageBtn.disabled = true; started = true;
-        }).catch(() => {
-          // autoplay blocked -> wait for gesture
-          pageBtn.addEventListener('click', startAudioAndRemove, { once: true });
-          pageBtn.addEventListener('pointerdown', startAudioAndRemove, { once: true, passive: true });
-          pageBtn.addEventListener('touchstart', startAudioAndRemove, { once: true, passive: true });
-          window.addEventListener('keydown', keyHandler, { once: true });
-        });
-      } else {
-        // fallback: attach gesture listeners
-        pageBtn.addEventListener('click', startAudioAndRemove, { once: true });
-        pageBtn.addEventListener('pointerdown', startAudioAndRemove, { once: true, passive: true });
-        pageBtn.addEventListener('touchstart', startAudioAndRemove, { once: true, passive: true });
-        window.addEventListener('keydown', keyHandler, { once: true });
-      }
-    })();
-
-    /***** Wish form -> mailto *****/
-    (function setupForm(){
-      const form = document.getElementById('wishForm');
-      form.addEventListener('submit', function(e){
-        e.preventDefault();
-        const name = document.getElementById('name').value.trim();
-        const wish = document.getElementById('wish').value.trim();
-        if (!name || !wish) { alert('Please fill both fields.'); return; }
-        const recipient = 'haniyakhanim@gmail.com';
-        const subject = 'Happy Birthday Haniya ❤️🥰';
-        const body = `Dearest Haniya,\n\nYou have received a new birthday wish!\n\nFrom: ${name}\n\nMessage:\n${wish}\n\n---\nSent from your birthday website.`;
-        window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    // Try autoplay immediately
+    const tryPlay = audio.play();
+    if (tryPlay && tryPlay.catch) {
+      tryPlay.catch(() => {
+        window.addEventListener('click', startAudio, { once: true });
+        window.addEventListener('touchstart', startAudio, { once: true });
+        window.addEventListener('keydown', startAudio, { once: true });
       });
-    })();
+    } else {
+      window.addEventListener('click', startAudio, { once: true });
+      window.addEventListener('touchstart', startAudio, { once: true });
+      window.addEventListener('keydown', startAudio, { once: true });
+    }
+  })();
 
-    /***** Dynamic card motion (pointer-driven) *****/
-    (function dynamicCardMotion(){
-      const card = document.querySelector('.card.dynamic');
-      if (!card) return;
-      let ticking = false;
-      function onMove(e){
-        if (ticking) return;
-        window.requestAnimationFrame(() => {
-          const x = (e.clientX || (e.touches && e.touches[0].clientX) || window.innerWidth/2) - (window.innerWidth/2);
-          const y = (e.clientY || (e.touches && e.touches[0].clientY) || window.innerHeight/2) - (window.innerHeight/2);
-          const rx = (y / window.innerHeight) * 6;
-          const ry = (x / window.innerWidth) * -6;
-          const tx = (x / window.innerWidth) * 8;
-          card.style.transform = `translateY(-8px) translateX(${tx}px) rotateX(${rx}deg) rotateY(${ry}deg)`;
-          ticking = false;
-        });
-        ticking = true;
+  /***** Wish form -> mailto *****/
+  (function setupForm(){
+    const form = document.getElementById('wishForm');
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      const name = document.getElementById('name').value.trim();
+      const wish = document.getElementById('wish').value.trim();
+      if (!name || !wish) {
+        alert('Please fill both fields.');
+        return;
       }
-      function reset(){ card.style.transform = ''; }
-      window.addEventListener('mousemove', onMove);
-      window.addEventListener('touchmove', onMove, { passive:true });
-      window.addEventListener('mouseleave', reset);
-      window.addEventListener('touchend', reset);
-    })();
+      const recipient = 'haniyakhanim@gmail.com';
+      const subject = 'Happy Birthday Haniya ❤️🥰';
+      const body = `Dearest Haniya,\n\nYou have received a new birthday wish!\n\nFrom: ${name}\n\nMessage:\n${wish}\n\n---\nSent from your birthday website.`;
+      window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    });
+  })();
 
-    //**** Subtle heart hover pulse *****/
-    (function heartHover(){
-      const heartText = document.getElementById('heartText');
-      if (!heartText) return;
-      heartText.addEventListener('mouseover', ()=> heartText.style.transform = 'translate(-50%,-50%) scale(1.03)');
-      heartText.addEventListener('mouseout',  ()=> heartText.style.transform = 'translate(-50%,-50%) scale(1)');
-    })();
-  </script>
+  /***** Dynamic card motion (pointer-driven) *****/
+  (function dynamicCardMotion(){
+    const card = document.querySelector('.card.dynamic');
+    if (!card) return;
+    let ticking = false;
+    function onMove(e){
+      if (ticking) return;
+      window.requestAnimationFrame(() => {
+        const x = (e.clientX || (e.touches && e.touches[0].clientX) || window.innerWidth/2) - (window.innerWidth/2);
+        const y = (e.clientY || (e.touches && e.touches[0].clientY) || window.innerHeight/2) - (window.innerHeight/2);
+        const rx = (y / window.innerHeight) * 6;
+        const ry = (x / window.innerWidth) * -6;
+        const tx = (x / window.innerWidth) * 8;
+        card.style.transform = `translateY(-8px) translateX(${tx}px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+        ticking = false;
+      });
+      ticking = true;
+    }
+    function reset(){ card.style.transform = ''; }
+    window.addEventListener('mousemove', onMove);
+    window.addEventListener('touchmove', onMove, { passive:true });
+    window.addEventListener('mouseleave', reset);
+    window.addEventListener('touchend', reset);
+  })();
+
+  /***** Subtle heart hover pulse *****/
+  (function heartHover(){
+    const heartText = document.getElementById('heartText');
+    if (!heartText) return;
+    heartText.addEventListener('mouseover', ()=> heartText.style.transform = 'translate(-50%,-50%) scale(1.03)');
+    heartText.addEventListener('mouseout',  ()=> heartText.style.transform = 'translate(-50%,-50%) scale(1)');
+  })();
+     </script>
 </body>
 </html>
